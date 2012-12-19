@@ -1,0 +1,91 @@
+package etouch.marketing.bean;
+
+import java.io.IOException;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.msgpack.MessagePack;
+import org.msgpack.annotation.Message;
+
+import etouch.marketing.actions.utils.JumpAction;
+import etouch.marketing.common.enums.DeviceType;
+
+/**
+ * @author Eric
+ *
+ */
+@Message
+public class AbstractBaseBean {
+  
+	/***
+	 * 数据操作判断所有，跟mysql数据库无关
+	 */
+	private boolean cached ;
+	
+	private int id ;
+	
+	private String etouchAppId ;
+	
+	private DeviceType device ;
+	
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getEtouchAppId() {
+		return etouchAppId;
+	}
+
+	public void setEtouchAppId(String etouchAppId) {
+		this.etouchAppId = etouchAppId;
+	}
+
+	public DeviceType getDevice() {
+		return device;
+	}
+
+	public void setDevice(DeviceType device) {
+		this.device = device;
+	}
+
+	public boolean isCached() {
+		return cached;
+	}
+
+	public void setCached(boolean cached) {
+		this.cached = cached;
+	}
+
+	public JSONObject toJSONString() throws JSONException{
+		throw new IllegalStateException("[AbstractBaseBean] Child Class should override this method before invoking !");
+	}
+	
+	public StringBuffer toXMLBuffer() {
+		throw new IllegalStateException("[AbstractBaseBean] Child Class should override this method before invoking !");
+	}
+	
+	public StringBuffer toXMLBuffer(Map<String,String> track) {
+		throw new IllegalStateException("[AbstractBaseBean] Child Class should override this method before invoking !");
+	}
+	
+	public byte[] toRawBytes(MessagePack messagePackInstance) throws IOException{
+		throw new IllegalStateException("[AbstractBaseBean] Child Class should override this method before invoking !");
+	}
+	
+	protected String wrappClickUrl(String ticket, String originalUrl){
+		
+		if(StringUtils.isBlank(ticket) || StringUtils.isBlank(originalUrl)){
+			return originalUrl ;
+		}
+		
+		return JumpAction.generateTrackUrl(ticket) ;
+			
+	}
+}
